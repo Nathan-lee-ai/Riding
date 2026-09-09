@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SkyRide — 하늘을 달리는 로드 자전거 동호회">
+  <title>SkyRide | 로드 자전거 동호회</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="SkyRide 홈">
+      <span class="brand-mark">↗</span>
+      <span><strong>SKY</strong>RIDE <small>ROAD CYCLING CLUB</small></span>
+    </a>
+    <nav class="main-nav" aria-label="주 메뉴">
+      <a href="#about">동호회</a>
+      <a href="#events">정기모임</a>
+      <a href="#small-events">소모임</a>
+      <a href="#board">게시판</a>
+    </nav>
+    <div class="auth-area">
+      <span id="userLabel" class="user-label"></span>
+      <button id="loginBtn" class="btn btn-outline">로그인</button>
+      <button id="signupBtn" class="btn btn-primary">회원가입</button>
+      <button id="logoutBtn" class="btn btn-outline hidden">로그아웃</button>
+    </div>
+    <button id="menuBtn" class="menu-btn" aria-label="메뉴 열기">☰</button>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="eyebrow">SKY • ROAD • RIDE TOGETHER</p>
+        <h1>하늘을 달리고,<br><em>길을 함께 기억하다.</em></h1>
+        <p class="hero-copy">연 4회의 정기 라이딩과 매달 열리는 소규모 라이딩.<br>지역의 좋은 길과 풍경을 함께 발견하는 로드 자전거 동호회입니다.</p>
+        <div class="hero-actions">
+          <a class="btn btn-light" href="#events">정기모임 보기</a>
+          <a class="btn btn-ghost-light" href="#small-events">소모임 참여</a>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div><strong>4</strong><span>연간 정기모임</span></div>
+        <div><strong>12+</strong><span>월간 소모임</span></div>
+        <div><strong>∞</strong><span>함께 달리는 길</span></div>
+      </div>
+    </section>
+
+    <section id="about" class="section intro">
+      <div class="section-kicker">ABOUT SKYRIDE</div>
+      <div class="two-col">
+        <div>
+          <h2>속도보다 중요한 건<br><span>함께 달리는 경험</span>입니다.</h2>
+        </div>
+        <div>
+          <p>SkyRide는 초보부터 경험자까지 함께할 수 있는 로드 자전거 커뮤니티를 목표로 합니다. 매년 계절별 정기 라이딩을 운영하고, 매월 지역별 소모임을 통해 부담 없이 새로운 코스를 만나볼 수 있습니다.</p>
+          <div class="feature-list">
+            <div><b>01</b><span>지역별 라이딩 코스 공유</span></div>
+            <div><b>02</b><span>정기·소모임 신청 관리</span></div>
+            <div><b>03</b><span>회원 간 자유로운 정보 교류</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="events" class="section section-blue">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">ANNUAL RIDES</div>
+          <h2>연 4회 정기모임</h2>
+        </div>
+        <button class="btn btn-dark" id="newEventBtn">+ 정기모임 등록</button>
+      </div>
+      <div id="regularEvents" class="card-grid"></div>
+    </section>
+
+    <section id="small-events" class="section">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">MONTHLY SMALL RIDES</div>
+          <h2>매달 소규모 라이딩</h2>
+        </div>
+        <button class="btn btn-primary" id="newSmallEventBtn">+ 소모임 등록</button>
+      </div>
+      <div id="smallEvents" class="card-grid"></div>
+    </section>
+
+    <section id="board" class="section board-section">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">COMMUNITY BOARD</div>
+          <h2>라이더 게시판</h2>
+        </div>
+        <button class="btn btn-primary" id="newPostBtn">+ 글쓰기</button>
+      </div>
+      <div class="board-toolbar">
+        <div class="board-tabs">
+          <button class="tab active" data-board="notice">공지</button>
+          <button class="tab" data-board="free">자유게시판</button>
+          <button class="tab" data-board="course">코스추천</button>
+        </div>
+        <input id="boardSearch" class="search-input" placeholder="게시글 검색">
+      </div>
+      <div id="postsList" class="posts-list"></div>
+    </section>
+
+    <section class="cta">
+      <div>
+        <p class="eyebrow">RIDE WITH US</p>
+        <h2>이번 주말, 새로운 길을 만나보세요.</h2>
+      </div>
+      <a href="#small-events" class="btn btn-light">소모임 둘러보기 →</a>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>SKYRIDE</strong><span> ROAD CYCLING CLUB</span></div>
+    <p>© 2026 SkyRide Cycling Club · 강의용 샘플 사이트</p>
+  </footer>
+
+  <!-- Auth modal -->
+  <div id="authModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card auth-card">
+      <button class="modal-close" data-close="authModal">×</button>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-auth="login">로그인</button>
+        <button class="auth-tab" data-auth="signup">회원가입</button>
+      </div>
+      <form id="authForm">
+        <label>이메일<input id="authEmail" type="email" required placeholder="you@example.com"></label>
+        <label>비밀번호<input id="authPassword" type="password" required minlength="6" placeholder="6자 이상"></label>
+        <label id="nameField" class="hidden">닉네임<input id="authName" type="text" placeholder="라이딩 닉네임"></label>
+        <button class="btn btn-primary btn-block" type="submit" id="authSubmit">로그인</button>
+      </form>
+      <p class="modal-note">회원가입 시 이메일 인증이 켜져 있으면 인증 메일을 확인해야 로그인할 수 있습니다.</p>
+    </div>
+  </div>
+
+  <!-- Event modal -->
+  <div id="eventModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" data-close="eventModal">×</button>
+      <h3 id="eventModalTitle">라이딩 등록</h3>
+      <form id="eventForm">
+        <input type="hidden" id="eventId">
+        <input type="hidden" id="eventType">
+        <label>모임 제목<input id="eventTitle" required maxlength="120"></label>
+        <div class="form-row">
+          <label>날짜<input id="eventDate" type="date" required></label>
+          <label>시간<input id="eventTime" type="time" required></label>
+        </div>
+        <div class="form-row">
+          <label>지역<input id="eventRegion" required maxlength="50" placeholder="예: 강원 / 부산"></label>
+          <label>정원<input id="eventCapacity" type="number" min="2" max="200" value="15" required></label>
+        </div>
+        <label>출발지<input id="eventMeetingPoint" required maxlength="150" placeholder="예: 서울숲 입구"></label>
+        <label>코스/소개<textarea id="eventDescription" rows="4" required></textarea></label>
+        <button class="btn btn-primary btn-block" type="submit">저장</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Event detail/application modal -->
+  <div id="eventDetailModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card wide">
+      <button class="modal-close" data-close="eventDetailModal">×</button>
+      <div id="eventDetail"></div>
+    </div>
+  </div>
+
+  <!-- Post modal -->
+  <div id="postModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" data-close="postModal">×</button>
+      <h3 id="postModalTitle">게시글 작성</h3>
+      <form id="postForm">
+        <input type="hidden" id="postId">
+        <label>게시판
+          <select id="postBoard">
+            <option value="notice">공지</option>
+            <option value="free">자유게시판</option>
+            <option value="course">코스추천</option>
+          </select>
+        </label>
+        <label>제목<input id="postTitle" maxlength="150" required></label>
+        <label>내용<textarea id="postContent" rows="8" required></textarea></label>
+        <button class="btn btn-primary btn-block" type="submit">저장</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
